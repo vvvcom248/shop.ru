@@ -16,16 +16,15 @@ function goodsOut(data) {//вывод на страницу
         */
         //------ES6
         out += '<div class="cart">';
-        out += `<p class="name">${data[key].name}</p>`;
+        out += `<p class="name">${data[key].name}</p>`;//тут обратный слэш
         out += `<img src="images/${data[key].img}" alt="pictures">`;
         out += `<div class="cost">${data[key].cost}</div>`;
         out += '<buuton class="add-to-cart">Купить</buuton>';
         out += '</div>';
-
     }
     $('.goods-out').html(out);
 }
-init();
-$(document).ready(function () {
 
-})
+$(document).ready(function () {
+    init();
+});
