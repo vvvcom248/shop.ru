@@ -23,6 +23,13 @@
     color: white;
     padding: 10px 20px;
     border: none;
+    cursor: pointer;/*курсор в виде руки*/
+}
+.cart .add-to-cart:hover{/*Меняем цвет кнопки при наведении*/
+    background: #c0c0c0;
+}
+.cart .add-to-cart:active{/*Меняем цвет кнопки при нажатии*/
+    background: red;
 }
 .goods-out{
     border-top: 1px solid black;
