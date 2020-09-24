@@ -29,7 +29,7 @@ function showCart() {
                 out += ` <button data-id="${id}" class="minus-goods">-</button>`;
                 out += ` ${cart[id]}`;//колличество товара
                 out += ` <button data-id="${id}" class="plus-goods">+</button>`;
-                out += ` Сумма: ${cart[id]*goods[id].cost}`;//колличество умножаем на цену
+                out += ` Сумма: ${cart[id] * goods[id].cost}`;//колличество умножаем на цену
                 out += ` <br>`;
             }
             //теперь отресуем на странице
@@ -76,7 +76,41 @@ function isEmpty(object) {
         if (object.hasOwnProperty(key)) return true;
     return false;
 }
-//////////////
+/////////////////////////////////////////////////////////////
+function sendEmail() {
+    var ename = $('.ename').val();//в переменную ename вводим имя
+    var email = $('.email').val();
+    var ephone = $('.ephone').val();
+    if (ename != '' && email != '' && ephone != '') {
+        if (isEmpty(cart)) {
+            $.post(
+                "core/mail.php",
+                {
+                    "ename": ename,
+                    "email": email,
+                    "ephone": ephone,
+                    "cart": cart
+                },
+                function (data) {
+                    if(data==1){
+                        alert('Заказ отправлен.')
+                    }
+                    else{
+                        alert('Заказ не отправлен.')
+                    }
+                }
+            )
+        }
+        else {
+            alert('Корзина пуста')
+        }
+    }
+    else {
+        alert('Заполните поля');
+    }
+    //////////////////////////////////////////////////////////////////////
+}
 $(document).ready(function () {
     loadCart();
+    $('.send-email').on('click', sendEmail);//отправить письмо
 });
