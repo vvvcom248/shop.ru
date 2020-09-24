@@ -1,41 +1,36 @@
-
 var cart = {};//корзина
 
 function init() {
-    // $.getJSON("goods.json", goodsOut)//читаем фаил goods.json
+    var hash = window.location.hash.substring(1);
+    console.log(hash);
     $.post(
-        "admin/core.php", {
-        "action": "loadGoods"
-    },
+        "admin/core.php",
+        {
+            "action": "loadSingleGoods",
+            "id": hash
+        },
         goodsOut
     );
 }
 function goodsOut(data) {//вывод на страницу
     //console.log(data);
-    data = JSON.parse(data);//нужен только без файла goods.json на прямую из БД
-    var out = "";
-    for (var key in data) {
-        /*
-        ------ES5
+    if (data != 0) {
+        data = JSON.parse(data);//нужен только без файла goods.json на прямую из БД
+        var out = "";
         out += '<div class="cart">';
-        out += '<p class="name">' + data[key].name + '</p>';
-        out += '<img src="images/' + data[key].img + '" alt="pictures">';
-        out += '<div class="cost">' + data[key].cost + '</div>';
-        out += '<buuton class="add-to-cart">Купить</buuton>';
+        out += `<button class="later" data-id="${data.id}">&hearts;</button>`;
+        out += `<p class="name">${data.name}</p>`;//тут обратный слэш
+        out += `<img src="images/${data.img}" alt="pictures">`;//тут обратный слэш
+        out += `<div class="cost">${data.cost}</div>`;//тут обратный слэш
+        out += `<button class="add-to-cart" data-id="${data.id}">Купить</button>`;//в data-id получаем key товара//тут обратный слэш
         out += '</div>';
-        */
-        //------ES6
-        out += '<div class="cart">';
-        out += `<button class="later" data-id="${key}">&hearts;</button>`;
-        out += `<p class="name"><a href="goods.html#${key}">${data[key].name}</a></p>`;//тут обратный слэш
-        out += `<img src="images/${data[key].img}" alt="pictures">`;//тут обратный слэш
-        out += `<div class="cost">${data[key].cost}</div>`;//тут обратный слэш
-        out += `<button class="add-to-cart" data-id="${key}">Купить</button>`;//в data-id получаем key товара//тут обратный слэш
-        out += '</div>';
+        $('.goods-out').html(out);
+        $('.add-to-cart').on('click', addToCart);
+        $('.later').on('click', addToLater);
     }
-    $('.goods-out').html(out);
-    $('.add-to-cart').on('click', addToCart);
-    $('.later').on('click', addToLater);
+    else{
+        $('.goods-out').html("Такого товара нет!");
+    }
 }
 function addToLater() {//добавляем товар в "желания" в localStorage
     var later = {};
@@ -47,6 +42,7 @@ function addToLater() {//добавляем товар в "желания" в lo
     later[id] = 1;
     localStorage.setItem('later', JSON.stringify(later))
 }
+
 
 function addToCart() {//добавляем товар в корзину
     var id = $(this).attr('data-id');//в переменную id ложим data-id тоара
